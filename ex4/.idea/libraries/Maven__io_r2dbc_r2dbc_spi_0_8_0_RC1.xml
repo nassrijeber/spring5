@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.r2dbc:r2dbc-spi:0.8.0.RC1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../maven-repository/io/r2dbc/r2dbc-spi/0.8.0.RC1/r2dbc-spi-0.8.0.RC1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../../maven-repository/io/r2dbc/r2dbc-spi/0.8.0.RC1/r2dbc-spi-0.8.0.RC1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../maven-repository/io/r2dbc/r2dbc-spi/0.8.0.RC1/r2dbc-spi-0.8.0.RC1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

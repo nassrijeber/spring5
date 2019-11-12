@@ -1,0 +1,9 @@
+TranslationCommand:
+  handlers:
+    - ensp
+    - enfr
+    - frsp
+  parallelHandling: true
+AnotherCommand:
+  handlers:
+    - ...

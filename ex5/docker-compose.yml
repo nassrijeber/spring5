@@ -1,0 +1,13 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq
+    ports:
+    - 61613:61613
+    - 15674:15674
+    - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: psw
+    volumes:
+    - ./rabbitmq-plugins.txt:/etc/rabbitmq/enabled_plugins

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- service layer -->
+	<bean id="superService" class="com.acme.ex1.service.impl.SuperMovieServiceImpl">
+		<constructor-arg>
+			<set>
+				<ref bean="fox" />
+				<ref bean="warner" />
+			</set>
+		</constructor-arg>
+	</bean>
+
+	<bean id="service1" class="com.acme.ex1.service.impl.MovieServiceImpl">
+		<constructor-arg ref="fox" />
+	</bean>
+
+	<bean id="service2" class="com.acme.ex1.service.impl.MovieServiceImpl">
+		<constructor-arg ref="warner" />
+	</bean>
+
+	<!-- data access layer -->
+	<bean id="fox" class="com.acme.ex1.dao.impl.FoxMovieDaoImpl"
+		scope="singleton" />
+
+	<bean id="warner" class="com.acme.ex1.dao.impl.WarnerMovieDaoImpl" />
+
+</beans>

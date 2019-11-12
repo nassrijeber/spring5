@@ -1,0 +1,50 @@
+<html>
+
+<head>
+
+    <script src="sockjs-client-1.1.2.js"></script>
+    <script src="stomp-2.3.3.js"></script>
+
+    <script type="text/javascript">
+        const socket = new SockJS("//localhost:8080/hello");
+
+        const stompClient = Stomp.over(socket); // logique applicative au dessus de la connexion websocket.
+
+        stompClient.debug = () => {}
+
+        stompClient.connect({}, frame => {
+            console.log(frame);
+
+            const subscription = stompClient.subscribe("/chats/123/messages", (msg) => {
+                console.log(msg)
+                displayNewMessage(JSON.parse(msg.body));
+            });
+        });
+
+        function displayNewMessage(message){
+        	const div = document.createElement("div")
+            div.innerHTML = message.author+" : "+message.text;
+            document.getElementById('messages').appendChild(div);
+        }
+
+        function sendMessage(author, text){
+        	const message = {"text":text, "author":author};
+        	const headers = {"userId":"a1b2c3"}
+            stompClient.send("/chats/123/messages", headers, JSON.stringify(message));
+        }
+    </script>
+</head>
+<body>
+    <div id="messages">
+
+    </div>
+
+    <hr/>
+
+    <form>
+        <input type="text" id="author" size="10" placeholder="author..." value="John Doe"/>
+        <input type="text" id="text" size="50" placeholder="text..."/>
+        <button onclick="sendMessage(document.getElementById('author').value, document.getElementById('text').value);return false;">Envoyer</button>
+    </form>
+</body>
+</html>

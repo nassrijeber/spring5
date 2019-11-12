@@ -1,0 +1,41 @@
+﻿<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+	version="2.1">
+
+	<persistence-unit name="hib" transaction-type="RESOURCE_LOCAL">
+		<!-- pour utiliser HibernatePersistenceProvider, la dépendance vers hibernate-core est nécessaire (voir pom.xml) -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode> 
+		<properties>
+			
+			<!-- 
+				pour utiliser le driver postgresql, la dépendance vers postgresql est nécessaire (voir pom.xml) 
+				remarquer au passage que le nom des propriété est standard, ces propriétés sont donc portables et pas spécifiques au provider)	
+			-->
+			
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+			
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/ex3"/>
+			<property name="javax.persistence.jdbc.user" value="postgres"/>
+			<property name="javax.persistence.jdbc.password" value=""/>
+			
+			<!-- pour utiliser hikari, la dépendance vers hibernate-hikari est nécessaire (voir pom.xml) -->
+			<property name="hibernate.hikari.minimumIdle" value="5"/>
+			<property name="hibernate.hikari.maximumPoolSize" value="20"/>
+			
+			<!-- propriété spécifique au provider JPA (ici Hibernate) -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect" />
+			<property name="hibernate.show_sql" value="false"/>
+			
+			<!-- pour utiliser jcache et ehcache en tant qu'implémentation, les dépendances vers hibernate-jcache et ehcache sont nécessaires (voir pom.xml) -->
+			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jcache.JCacheRegionFactory" />
+			<property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider" />		
+			<property name="hibernate.cache.use_second_level_cache"	value="true" />
+
+		</properties>
+		
+		
+
+	</persistence-unit>
+</persistence>

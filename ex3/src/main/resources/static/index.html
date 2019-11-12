@@ -1,0 +1,116 @@
+<!doctype html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+<!-- empty favicon.ico-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<script type="text/javascript">
+		
+		const formDataToQueryString = (frm) => {
+			const formData = new FormData(frm);
+
+            const queryParams = Array.from(formData.entries())
+            	.filter(x => x[1]) // ne sont retenues que les entrées du formulaire dont la valeur est non nulle et non vide
+                .map(x => `${x[0]}=${x[1]}`)
+                .join("&");
+            
+			return queryParams;
+		}
+		
+		const formDataToJson = (frm) => {
+			const formData = new FormData(frm);
+            const userInputs = Array.from(formData.entries())
+				.filter(x => x[1]) // ne sont retenues que les entrées du formulaire dont la valeur est non nulle et non vide
+                .reduce((obj, entry) => {
+                    const name = entry[0];
+                    const value = entry[1];
+                    
+                    if(name.indexOf(".")==-1){
+            			obj[name] = value;
+            		}
+		            else{
+						const nodes = name.split(".");
+		            	const leaf = nodes.pop();
+						const propertyOwner = nodes.reduce((node, property)=> {
+							if(!node[property]){
+								node[property] = {}
+		            		}
+							return node[property];
+						}, obj)
+		            	propertyOwner[leaf] = value;
+		            }
+                    return obj;
+                }, {});
+            return userInputs;
+		}
+
+
+        const findByGet = (frm, target) => {
+
+            const queryParams = formDataToQueryString(frm);
+            
+            const headers = new Headers({"Accept": "application/json"});
+
+            window.fetch(`http://localhost:8080/books?${encodeURI(queryParams)}`, {headers: headers})
+                .then(x => x.json())
+                .then(results => {
+                    const elements = results
+                        .map(x => `<li class="list-group-item">${x.title}</li>`)
+                        .join("");
+                    target.innerHTML = `<ul class="list-group">
+                        ${elements}
+                    </ul>
+                    `;
+                });
+        }
+
+        const findByPost = (frm, target) => {
+           
+        	const userInputs = formDataToJson(frm);
+
+            const headers = new Headers({
+                "Content-type": "application/json",
+                "Accept": "application/json"
+            });
+
+            const settings = {method: "post", body: JSON.stringify(userInputs), headers: headers};
+            window.fetch(`http://localhost:8080/searches?domain=books`, settings)
+                .then(x => x.json())
+                .then(results => {
+                    const elements = results
+                        .map(x => `<li class="list-group-item">${x.title}</li>`)
+                        .join("");
+                    target.innerHTML = `<ul class="list-group">
+                        ${elements}
+                    </ul>
+                    `;
+                });
+        }
+    </script>
+</head>
+
+<body>   formulaire de recherche -->
+			<form>
+				Title : <input type="text" name="title" class="form-control" /> <br />
+				Author name : <input type="text" name="author.lastname"
+					class="form-control" /> <br />
+				<button class="btn btn-primary"
+					onclick="findByGet(this.closest('form'), getElementById('results'));return false">GET
+					on /books</button>
+				<button class="btn btn-primary"
+					onclick="findByPost(this.closest('form'), getElementById('results'));return false">POST
+					on /searches?domain=books</button>
+			</form>
+		</div>
+		<!-- résultats -->
+		<div style="flex: 2; padding: 15px" id="results"></div>
+	</div>
+</body>
+
+
+</html>

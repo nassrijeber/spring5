@@ -1,0 +1,24 @@
+version: '3'
+services:
+  pg:
+    image: postgres
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 
+      POSTGRES_DB: ex3
+    volumes:
+    - ./ex3.sql:/docker-entrypoint-initdb.d/init.sql
+    command: postgres -c max_prepared_transactions=10
+  keycloak:
+    image: jboss/keycloak:latest
+    ports:
+      - 8282:8080
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
+    volumes:
+      - ./keycloack-realm-export.json:/opt/jboss/keycloak/imports/realm-export.json
